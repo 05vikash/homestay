@@ -11,7 +11,8 @@ const user=require("./router/user.js");
 const session=require("express-session");
 
 
-const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
+// const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
+const dburl = "mongodb+srv://05vikashdubey:XVy8gImgnCb0cSPN@cluster0.vd51r.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
 main()
   .then(() => {
@@ -22,7 +23,7 @@ main()
   });
 
 async function main() {
-  await mongoose.connect(MONGO_URL);
+  await mongoose.connect(dburl);
 }
 app.set("view engine","ejs");
 app.set("views",path.join(__dirname,"views"));
@@ -38,7 +39,7 @@ const sessionOption={
   saveUninitialised:true
 };
 
-app.use(session(sessionOption));
+// app.use(session(sessionOption));
 
 app.use("/",user);
 app.use("/listing",listings);
