@@ -7,14 +7,19 @@ const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
 main()
   .then(() => {
     console.log("connected to DB");
+    return initDB(); // Await the DB initialization after connection
+  })
+  .then(() => {
+    console.log("data was initialized");
   })
   .catch((err) => {
     console.log(err);
   });
-
-async function main() {
-  await mongoose.connect(MONGO_URL);
-}
+  
+  async function main() {
+    await mongoose.connect(MONGO_URL);
+  }
+  
 
 const initDB = async () => {
   await Listing.deleteMany({});
@@ -22,4 +27,3 @@ const initDB = async () => {
   console.log("data was initialized");
 };
 
-initDB();
