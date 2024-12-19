@@ -9,6 +9,7 @@ const listings=require("./router/listing.js")
 const reviews=require("./router/review.js")
 const user=require("./router/user.js");
 const session=require("express-session");
+const Listing = require('./models/listing.js');
 
 
 // const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
@@ -47,8 +48,9 @@ app.use("/listings/:id/reviews",reviews);
 
 
 // global error
-app.all("*",(req,res,next)=>{
-  next(new ExpressError(404,"page not found"));
+app.all("*",async(req,res,next)=>{
+  const allListings=await Listing.find({});
+  res.render("listings/index.ejs",{allListings});
 });
 
 app.use((err,req,res,next)=>{
