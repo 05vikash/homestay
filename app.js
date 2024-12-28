@@ -10,11 +10,6 @@ const reviews=require("./router/review.js")
 const users=require("./router/user.js")
 
 const session=require("express-session");
-const Listing = require('./models/listing.js');
-const flash=require("connect-flash");
-const passport=require("passport");
-const LocalStrategy=require("passport-local");
-const User=require("./models/user.js");
 
 
 const dburl = "mongodb://127.0.0.1:27017/wanderlust";
