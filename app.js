@@ -8,12 +8,16 @@ const ExpressError = require('./utils/ExpressError.js');
 const listings=require("./router/listing.js")
 const reviews=require("./router/review.js")
 const users=require("./router/user.js")
-
+const Listing=require("./models/listing.js");
 const session=require("express-session");
+const flash=require("connect-flash");
+const passport=require("passport");
+const LocalStrategy=require("passport-local");
+const User=require("./models/user.js");
 
 
-const dburl = "mongodb://127.0.0.1:27017/wanderlust";
-// const dburl = "mongodb+srv://05vikashdubey:XVy8gImgnCb0cSPN@cluster0.vd51r.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+// const dburl = "mongodb://127.0.0.1:27017/wanderlust";
+const dburl = "mongodb+srv://05vikashdubey:XVy8gImgnCb0cSPN@cluster0.vd51r.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
 main()
   .then(() => {
