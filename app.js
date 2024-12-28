@@ -7,13 +7,18 @@ const ejsMate=require("ejs-mate");
 const ExpressError = require('./utils/ExpressError.js');
 const listings=require("./router/listing.js")
 const reviews=require("./router/review.js")
-const user=require("./router/user.js");
+const users=require("./router/user.js")
+
 const session=require("express-session");
 const Listing = require('./models/listing.js');
+const flash=require("connect-flash");
+const passport=require("passport");
+const LocalStrategy=require("passport-local");
+const User=require("./models/user.js");
 
 
-// const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
-const dburl = "mongodb+srv://05vikashdubey:XVy8gImgnCb0cSPN@cluster0.vd51r.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const dburl = "mongodb://127.0.0.1:27017/wanderlust";
+// const dburl = "mongodb+srv://05vikashdubey:XVy8gImgnCb0cSPN@cluster0.vd51r.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
 main()
   .then(() => {
@@ -34,15 +39,48 @@ app.engine("ejs",ejsMate);
 app.use(express.static(path.join(__dirname,"public")));
 
 
-const sessionOption={
-  secret:"mysupersecretcode",
-  resave:false,
-  saveUninitialised:true
-};
+// const sessionOption={
+//   secret:"mysupersecretcode",
+//   resave: false,
+//   saveUninitialised: true,
+// };
 
-// app.use(session(sessionOption));
+app.use(session({
+  secret: 'mysupersecretcode', // Replace with your own secret key
+  resave: false,             // Do not save the session if it was not modified
+  saveUninitialized: true,  // Do not create session until something is stored
+  cookie: { 
+     expire:Date.now(),               // Optional: Configure the cookie behavior
+    maxAge: 60000 ,
+    httpOnly:true,            // 1 minute (adjust as needed)
+  }
+}));
 
-app.use("/",user);
+app.use(flash());
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+app.use((req,res,next)=>{
+
+  res.locals.success=req.flash("success");
+  res.locals.error=req.flash("error");
+   next();
+});
+
+app.get("/demo",async(req,res)=>{
+  let user=new User({
+    email:"vk@gmail.com",
+    username:"vikash",
+
+  });
+  const newUser=await User.register(user,"helloworld");
+  res.send(newUser);
+})
+ 
+app.use("/",users);
 app.use("/listing",listings);
 app.use("/listings/:id/reviews",reviews);
 
