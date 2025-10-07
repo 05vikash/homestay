@@ -1,8 +1,8 @@
 <% layout("/layouts/boilerplate") -%>
 
-    <body>
+  
         
-        <form method="post" action="/listing" novalidate class="needs-validation">
+        <form method="post" action="/listing" novalidate class="needs-validation" enctype="multipart/form-data">
 
             <div class="row">
                 <div class="col-8 offset-2">
@@ -40,7 +40,7 @@
                         <input
                         name="listing[image]"
                         placeholder="enter image URL/Link"
-                        type="text"
+                        type="file"
                         class="form-control"
                       />
                       </div>
@@ -75,6 +75,4 @@
             </div>
 
         </form>
-    </body>
-
-    </html>
+   
